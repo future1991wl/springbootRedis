@@ -11,12 +11,15 @@ import com.zw.zwpp.base.BaseResponse;
 import com.zw.zwpp.entity.User;
 import com.zw.zwpp.service.UserService;
 import com.zw.zwpp.utils.DesUtil;
+import com.zw.zwpp.utils.JwtUtil;
 import com.zw.zwpp.vo.reqvo.UserReqVo;
 
 @Controller
 public class LoginController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private JwtUtil jwtUtil;
 	@ResponseBody
 	@PostMapping("/login")
 	public BaseResponse login(UserReqVo reqVo) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -28,6 +31,9 @@ public class LoginController {
 		if(u != null) {
 			String password = u.getPassword();
 			if(encoderByMd5.equals(password)) {
+				String token = jwtUtil.getToken(name);
+				String parseToken = jwtUtil.parseToken(token, String.class);
+				System.out.println(token + parseToken);
 				return resp;
 			}else {
 				resp.setCode(500);
