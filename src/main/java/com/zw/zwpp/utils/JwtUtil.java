@@ -6,11 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
@@ -76,6 +72,5 @@ public class JwtUtil {
 			e.printStackTrace();
 		}
 		return null;
-		
 	}
 }
