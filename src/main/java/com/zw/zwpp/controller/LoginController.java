@@ -3,6 +3,8 @@ package com.zw.zwpp.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,10 @@ public class LoginController {
 	private TokenUtil tokenUtil;
 	@ResponseBody
 	@PostMapping("/login")
-	public BaseResponse login(UserReqVo reqVo) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public BaseResponse login(HttpServletRequest request, UserReqVo reqVo) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		String header = request.getHeader("s");
+		String parameter = request.getParameter("s");
+		System.out.println(header + "" + parameter);
 		BaseResponse resp = new BaseResponse();
 		String name = reqVo.getName();
 		String reqPassword = reqVo.getPassword();

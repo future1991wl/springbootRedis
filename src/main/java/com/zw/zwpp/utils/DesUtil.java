@@ -14,7 +14,5 @@ public class DesUtil {
 		Encoder encoder = Base64.getEncoder();
 		String encodeToString = encoder.encodeToString(digest);
 		return encodeToString;
-		
-		
 	}
 }
