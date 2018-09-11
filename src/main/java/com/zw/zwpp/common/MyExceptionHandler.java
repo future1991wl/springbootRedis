@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zw.zwpp.base.BaseResponse;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class MyExceptionHandler {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@ExceptionHandler

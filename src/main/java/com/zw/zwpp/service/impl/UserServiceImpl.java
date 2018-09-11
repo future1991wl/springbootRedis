@@ -21,5 +21,9 @@ public class UserServiceImpl implements UserService {
 		return save;
 		
 	}
+	@Override
+	public Integer updateUser(User user) {
+		return userRepository.updateUser(user.getPassword(),user.getId());
+	}
 
 }

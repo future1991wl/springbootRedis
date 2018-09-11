@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
@@ -37,11 +37,12 @@ public class LoginController {
 	@Autowired
 	private TokenUtil tokenUtil;
 	@ResponseBody
-	@PostMapping("/login")
-	public BaseResponse login(HttpServletRequest request, UserReqVo reqVo) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		String header = request.getHeader("s");
-		String parameter = request.getParameter("s");
-		System.out.println(header + "" + parameter);
+	@RequestMapping("/login")
+	public BaseResponse login(HttpServletRequest request) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		String s = request.getParameter("s");
+		String reqStr = DesUtil.DataDecryptionNo(s);
+		JSONObject parseObject = JSONObject.parseObject(reqStr);
+		UserReqVo reqVo = JSONObject.toJavaObject(parseObject, UserReqVo.class);
 		BaseResponse resp = new BaseResponse();
 		String name = reqVo.getName();
 		String reqPassword = reqVo.getPassword();
@@ -79,6 +80,17 @@ public class LoginController {
 	@PostMapping("/signIn")
 	public BaseResponse signIn(UserReqVo reqVo) {
 		BaseResponse resp = new BaseResponse();
+		String vCode = (String)redisUtil.get(reqVo.getName());
+		if(vCode == null) {
+			resp.setCode(500);
+			resp.setMsg("验证超时！");
+			return resp;
+		}
+		if(!vCode.equals(reqVo.getCode())) {
+			resp.setCode(500);
+			resp.setMsg("验证输入有误！");
+			return resp;
+		}
 		User u = new User();
 		String password = "";
 		try {
@@ -107,11 +119,45 @@ public class LoginController {
 			return resp;
 		}
 	}
-	@PostMapping("/test")
-	public BaseResponse test(@RequestParam String token) {
-		BaseResponse resp = new BaseResponse(); 
-		long userId = tokenUtil.checkToken(token);
+	@ResponseBody
+	@PostMapping("/updatePassword")
+	public BaseResponse updatePassword(UserReqVo reqVo) {
+		BaseResponse resp = new BaseResponse();
+		String vCode = (String)redisUtil.get(reqVo.getName());
+		if(vCode == null) {
+			resp.setCode(500);
+			resp.setMsg("验证超时！");
+			return resp;
+		}
+		if(!vCode.equals(reqVo.getCode())) {
+			resp.setCode(500);
+			resp.setMsg("验证输入有误！");
+			return resp;
+		}
+		User user = userService.findByName(reqVo.getName());
+		if(user == null) {
+			resp.setMsg("该用户名不存在！");
+			resp.setCode(500);
+			return resp;
+		}
+		//加密新密码
+		String password = "";
+		try {
+			password = DesUtil.EncoderByMd5(reqVo.getPassword());
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("密码加密异常：{} ",e.getMessage());
+			resp.setCode(500);
+			resp.setMsg("密码加密异常");
+			return resp;
+		}
+		user.setPassword(password);
+		Integer id = userService.updateUser(user);
+		if(id==null) {
+			resp.setCode(500);
+			resp.setMsg("密码修改失败");
+			return resp;
+		}
 		return resp;
-		
 	}
 }

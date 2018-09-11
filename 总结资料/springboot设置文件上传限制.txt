@@ -1,0 +1,15 @@
+一 。application.properties
+ spring.http.multipart.maxFileSize=10Mb  
+spring.http.multipart.maxRequestSize=10Mb  
+二。
+可以放到启动类中 
+
+@Bean  
+    public MultipartConfigElement multipartConfigElement() {  
+        MultipartConfigFactory factory = new MultipartConfigFactory();  
+        //文件最大  
+        factory.setMaxFileSize("10240KB"); //KB,MB  
+        /// 设置总上传数据总大小  
+        factory.setMaxRequestSize("102400KB");  
+        return factory.createMultipartConfig();  
+    } 

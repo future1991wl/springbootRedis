@@ -1,0 +1,2 @@
+我用的win10家庭版  需要升级为专业版或者企业版
+win+R  运行gpedit.msc  修改 计算机配置/管理模板/系统/凭据分配/Encryption Oracle remediation双击   选中已启用 选项修改成易受攻击的 
