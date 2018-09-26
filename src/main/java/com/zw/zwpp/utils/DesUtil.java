@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
+import java.util.Date;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -131,11 +132,14 @@ public class DesUtil {
 	}
 	public static void main(String[] args) {
 		JSONObject json = new JSONObject();
+		long currentTimeMillis = System.currentTimeMillis();
+		System.out.println(currentTimeMillis);
 		json.put("name", "15311147438");
-		json.put("password", "111111");
+		json.put("time", "1536823651715");
+		json.put("money", "15.5");
 		String jsonStr = JSONObject.toJSONString(json);
 		String dateEncrytionNo = DateEncrytionNo(jsonStr);
-		String dataDecryptionNo = DataDecryptionNo(dateEncrytionNo);
+		String dataDecryptionNo = DataDecryptionNo("ay9FDGh6h6ZFzW8wJWYhHSHkBFzprxqvIm3o0JtZyQKANDKFm8a8w ka nMT4RXsSMRFkW hv/8sJg34d7uL/g==");
 		System.out.println("加密"+dateEncrytionNo+"解密"+dataDecryptionNo);
 	}
 }

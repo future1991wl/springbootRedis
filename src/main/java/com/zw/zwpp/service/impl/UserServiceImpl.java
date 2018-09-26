@@ -25,5 +25,13 @@ public class UserServiceImpl implements UserService {
 	public Integer updateUser(User user) {
 		return userRepository.updateUser(user.getPassword(),user.getId());
 	}
+	@Override
+	public Integer updateMoneyByUser(User u) {
+		return userRepository.updateMoneyByUser(u.getMoney(),u.getId());
+	}
+	@Override
+	public Integer updateUserAddress(User u) {
+		return userRepository.updateUserAddress(u.getAddress(), u.getId());
+	}
 
 }

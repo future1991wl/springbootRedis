@@ -26,7 +26,7 @@
           </layout>
     </appender>
     
-    <root level="debug,ERROR">
+    <root level="INFO,ERROR">
         <appender-ref ref="console" />
         <appender-ref ref="logFile" />
     </root>

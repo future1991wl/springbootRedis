@@ -14,4 +14,13 @@ public interface UserRepository extends BaseRepository<User, Integer> {
 	@Modifying
 	@Query(value  = "update User u set u.password = ?1 where u.id = ?2",nativeQuery = true)
 	int updateUser(String password, Integer id);
+	
+	@Transactional
+	@Modifying
+	@Query(value  = "update User u set u.money = ?1 where u.id = ?2",nativeQuery = true)
+	Integer updateMoneyByUser(Double money, Integer id);
+	@Transactional
+	@Modifying
+	@Query(value  = "update User u set u.address = ?1 where u.id = ?2",nativeQuery = true)
+	Integer updateUserAddress(String address, Integer id);
 }
