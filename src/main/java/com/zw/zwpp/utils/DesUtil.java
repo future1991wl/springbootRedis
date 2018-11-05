@@ -134,9 +134,8 @@ public class DesUtil {
 		JSONObject json = new JSONObject();
 		long currentTimeMillis = System.currentTimeMillis();
 		System.out.println(currentTimeMillis);
-		json.put("name", "15311147438");
-		json.put("time", "1536823651715");
-		json.put("money", "15.5");
+		json.put("equipmentCode", "电脑1模拟器2");
+		json.put("state", "1");
 		String jsonStr = JSONObject.toJSONString(json);
 		String dateEncrytionNo = DateEncrytionNo(jsonStr);
 		String dataDecryptionNo = DataDecryptionNo("ay9FDGh6h6ZFzW8wJWYhHSHkBFzprxqvIm3o0JtZyQKANDKFm8a8w ka nMT4RXsSMRFkW hv/8sJg34d7uL/g==");

@@ -48,11 +48,9 @@ public class ZYApplyServiceImpl implements ZYApplyService {
 		for (EquipmentInfo equipmentInfo : list) {
 			String address = equipmentInfo.getAddress();
 			Integer simulatorNum = equipmentInfo.getSimulatorNum();
-			//String address = "[[1,2],[3,4],[5],[6,7]]";
 			//将地址放到集合中
 			List<List<String>> oldList = new ArrayList<>(simulatorNum);
 			List<String> newList = null;
-		//	if(StringUtils.isNotEmpty(address)) {
 				String[] split = address.replace(" ", "").split("\\]\\,\\[");
 				for (int i = 0; i < split.length; i++) {
 					String[] split2 = split[i].replace("[", "").replace("]", "").split(",");
@@ -64,7 +62,6 @@ public class ZYApplyServiceImpl implements ZYApplyService {
 					}
 						oldList.add(newList);
 				}
-		//	}
 			logger.info("地址集合长度：{}",oldList.size());
 			if(oldList.size()<simulatorNum) {
 				int num = simulatorNum-oldList.size();
@@ -131,5 +128,10 @@ public class ZYApplyServiceImpl implements ZYApplyService {
 			}
 		}
 		return res;
+	}
+
+	@Override
+	public ApplyInfo getGameLevelingInfo(String gameID, String gameVersion) {
+		return applyRepository.getGameLevelingInfo(gameID,gameVersion);
 	}
 }
