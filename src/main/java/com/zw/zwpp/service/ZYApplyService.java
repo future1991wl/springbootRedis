@@ -1,5 +1,7 @@
 package com.zw.zwpp.service;
 
+import java.util.List;
+
 import com.zw.zwpp.base.BaseResponse;
 import com.zw.zwpp.entity.ApplyInfo;
 
@@ -36,4 +38,20 @@ public interface ZYApplyService {
 	 * @return
 	 */
 	ApplyInfo getGameLevelingInfo(String gameID, String gameVersion);
+
+	/**
+	 * 通过id删除代练信息
+	 * @param name
+	 * @param gameID
+	 * @param gameVersion
+	 * @return
+	 */
+	int deleteById(Integer id);
+
+	/**
+	 * 获取用户代练列表
+	 * @param name
+	 * @return
+	 */
+	List<ApplyInfo> queryApplyGameLeveingList(String name);
 }

@@ -1,6 +1,12 @@
 package com.zw.zwpp.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +46,32 @@ public class FileController {
 			resp.setMsg("文件上传异常");;
 			return resp;
 		}
+		return resp;
+		
+	}
+	@RequestMapping("/testLinux")
+	public BaseResponse  testLinux(HttpServletRequest request) {
+		BaseResponse resp = new BaseResponse();
+		 String[] cmds = {"cd /usr/printer/","mkdir testlinux"};
+		 logger.info("执行cmds,{}",cmds);
+         Process pro;
+		try {
+			pro = Runtime.getRuntime().exec(cmds);
+			pro.waitFor();
+			InputStream in = pro.getInputStream();  
+			BufferedReader read = new BufferedReader(new InputStreamReader(in));  
+			String line = null;  
+			while((line = read.readLine())!=null){  
+				 logger.info("执行cmds,{}",line);
+				 System.out.println(line);
+			}  
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
 		return resp;
 		
 	}

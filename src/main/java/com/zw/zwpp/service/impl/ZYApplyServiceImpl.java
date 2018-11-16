@@ -32,7 +32,7 @@ public class ZYApplyServiceImpl implements ZYApplyService {
 	public ApplyInfo findById(int id) {
 		return applyRepository.findOne(id);
 	}
-
+	@Transactional
 	@Override
 	public ApplyInfo save(ApplyInfo apply) {
 		return applyRepository.save(apply);
@@ -133,5 +133,13 @@ public class ZYApplyServiceImpl implements ZYApplyService {
 	@Override
 	public ApplyInfo getGameLevelingInfo(String gameID, String gameVersion) {
 		return applyRepository.getGameLevelingInfo(gameID,gameVersion);
+	}
+	@Override
+	public int deleteById(Integer id) {
+		return applyRepository.deleteById(id);
+	}
+	@Override
+	public List<ApplyInfo> queryApplyGameLeveingList(String name) {
+		return applyRepository.findAllByName(name);
 	}
 }

@@ -3,6 +3,7 @@ package com.zw.zwpp.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.internal.org.apache.commons.lang3.StringUtils;
 import com.zw.zwpp.base.BaseResponse;
 import com.zw.zwpp.entity.ApplyInfo;
 import com.zw.zwpp.service.ZYApplyService;
@@ -28,6 +30,13 @@ public class ZYApplyGameLevelingController {
 	@Autowired
 	private ZYApplyService applyService;
 
+	/**
+	 * 逻辑修改不用这段代码
+	 * @param request
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws UnsupportedEncodingException
+	 */
 	@RequestMapping("/apply")
 	public BaseResponse login(HttpServletRequest request)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -97,5 +106,76 @@ public class ZYApplyGameLevelingController {
 		String[] result = new String[emptyNames.size()];
 		return emptyNames.toArray(result);
 	}
-
+	@RequestMapping("/addApplyGameLeveing")
+	public BaseResponse addApplyGameLeveing(HttpServletRequest request){
+		BaseResponse res = new BaseResponse();
+		String s = request.getParameter("s");
+		logger.info("用户申请代练：{}", s);
+		String reqStr = DesUtil.DataDecryptionNo(s);
+		logger.info("解析通过游戏账号和游戏账号申请代练信息入参：{}", reqStr);
+		JSONObject reqJson = JSONObject.parseObject(reqStr);
+		ApplyInfo applyInfo = JSONObject.toJavaObject(reqJson, ApplyInfo.class);
+		if(StringUtils.isBlank(applyInfo.getName()) || StringUtils.isBlank(applyInfo.getGameID()) || StringUtils.isBlank(applyInfo.getGameVersion())) {
+			logger.info("用户账号：{},游戏账号：{},游戏版本：{}", applyInfo.getName(), applyInfo.getGameID(), applyInfo.getGameVersion());
+			res.setCode(500);
+			res.setMsg("此游戏账号:"+applyInfo.getGameID() +",游戏版本:"+applyInfo.getGameVersion() +"已经存在代练新信息，请先取消代练！");
+			return res;
+		}
+		ApplyInfo oldApplyInfo = applyService.getGameLevelingInfo(applyInfo.getGameID(), applyInfo.getGameVersion());
+		if(oldApplyInfo != null) {
+			res.setCode(500);
+			res.setMsg("此游戏账号:"+applyInfo.getGameID() +",游戏版本:"+applyInfo.getGameVersion() +"已经存在代练新信息，请先取消代练！");
+			return res;
+		}
+		ApplyInfo apply = applyService.save(applyInfo);
+		res.setData(apply);
+		if(apply == null) {
+			res.setCode(500);
+			res.setMsg("申请代练失败！");
+		}
+		return res;
+	}
+	@RequestMapping("/deleteApplyGameLeveing")
+	public BaseResponse deleteApplyGameLeveing(HttpServletRequest request){
+		BaseResponse res = new BaseResponse();
+		String s = request.getParameter("s");
+		logger.info("用户删除代练：{}", s);
+		String reqStr = DesUtil.DataDecryptionNo(s);
+		logger.info("解析通过游戏账号和游戏账号删除代练信息入参：{}", reqStr);
+		JSONObject reqJson = JSONObject.parseObject(reqStr);
+		ApplyInfo applyInfo = JSONObject.toJavaObject(reqJson, ApplyInfo.class);
+		if(StringUtils.isBlank(applyInfo.getName()) || StringUtils.isBlank(applyInfo.getGameID()) || StringUtils.isBlank(applyInfo.getGameVersion())) {
+			logger.info("用户账号：{},游戏账号：{},游戏版本：{}", applyInfo.getName(), applyInfo.getGameID(), applyInfo.getGameVersion());
+			res.setCode(500);
+			res.setMsg("用户账号、游戏账号、游戏版本某一个可能为空！");
+			return res;
+		}
+		ApplyInfo oldApplyInfo = applyService.getGameLevelingInfo(applyInfo.getGameID(), applyInfo.getGameVersion());
+		if(oldApplyInfo != null) {
+			int num = applyService.deleteById(oldApplyInfo.getId());
+		}
+		return res;
+	}
+	@RequestMapping("/queryApplyGameLeveingList")
+	public BaseResponse queryApplyGameLeveingList(HttpServletRequest request){
+		BaseResponse res = new BaseResponse();
+		String s = request.getParameter("s");
+		logger.info("获取代练列表：{}", s);
+		String reqStr = DesUtil.DataDecryptionNo(s);
+		logger.info("解析获取代练列表入参：{}", reqStr);
+		JSONObject reqJson = JSONObject.parseObject(reqStr);
+		ApplyInfo applyInfo = JSONObject.toJavaObject(reqJson, ApplyInfo.class);
+		if(StringUtils.isBlank(applyInfo.getName())) {
+			logger.info("用户账号：{}", applyInfo.getName());
+			res.setCode(500);
+			res.setMsg("用户账号为空！");
+			return res;
+		}
+		List<ApplyInfo> list = applyService.queryApplyGameLeveingList(applyInfo.getName());
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setGamePwd("");
+		}
+		res.setData(list);
+		return res;
+	}
 }
