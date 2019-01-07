@@ -78,8 +78,15 @@ public class ZYApplyGameLevelingController {
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		BaseResponse res = new BaseResponse();
 		String s = request.getParameter("s");
-		logger.info("通过游戏账号和游戏版本修改账号代练信息：{}", s);
-		String reqStr = DesUtil.DataDecryptionNo(s);
+		String flag = request.getParameter("flag");
+		String reqStr="";
+		logger.info("flag:{},电脑端：false,手机端：true", flag);
+		if("true".equals(flag)) {
+			logger.info("通过游戏账号和游戏版本修改账号代练信息：{}", s);
+			reqStr = DesUtil.DataDecryptionNo(s);
+		}else if("false".equals(flag)){
+			reqStr ="{"+s+"}";
+		}
 		logger.info("解析通过游戏账号和游戏账号修改该代练信息入参：{}", reqStr);
 		JSONObject reqJson = JSONObject.parseObject(reqStr);
 		String gameID = reqJson.getString("gameID");
@@ -111,7 +118,15 @@ public class ZYApplyGameLevelingController {
 		BaseResponse res = new BaseResponse();
 		String s = request.getParameter("s");
 		logger.info("用户申请代练：{}", s);
-		String reqStr = DesUtil.DataDecryptionNo(s);
+		String flag = request.getParameter("flag");
+		String reqStr="";
+		logger.info("flag:{},电脑端：false,手机端：true", flag);
+		if("true".equals(flag)) {
+			logger.info("通过游戏账号和游戏版本修改账号代练信息：{}", s);
+			reqStr = DesUtil.DataDecryptionNo(s);
+		}else if("false".equals(flag)){
+			reqStr ="{"+s+"}";
+		}
 		logger.info("解析通过游戏账号和游戏账号申请代练信息入参：{}", reqStr);
 		JSONObject reqJson = JSONObject.parseObject(reqStr);
 		ApplyInfo applyInfo = JSONObject.toJavaObject(reqJson, ApplyInfo.class);
@@ -140,7 +155,15 @@ public class ZYApplyGameLevelingController {
 		BaseResponse res = new BaseResponse();
 		String s = request.getParameter("s");
 		logger.info("用户删除代练：{}", s);
-		String reqStr = DesUtil.DataDecryptionNo(s);
+		String flag = request.getParameter("flag");
+		String reqStr="";
+		logger.info("flag:{},电脑端：false,手机端：true", flag);
+		if("true".equals(flag)) {
+			logger.info("通过游戏账号和游戏版本修改账号代练信息：{}", s);
+			reqStr = DesUtil.DataDecryptionNo(s);
+		}else if("false".equals(flag)){
+			reqStr ="{"+s+"}";
+		}
 		logger.info("解析通过游戏账号和游戏账号删除代练信息入参：{}", reqStr);
 		JSONObject reqJson = JSONObject.parseObject(reqStr);
 		ApplyInfo applyInfo = JSONObject.toJavaObject(reqJson, ApplyInfo.class);
